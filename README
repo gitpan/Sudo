@@ -1,0 +1,35 @@
+Sudo version 0.10
+=================
+
+    Sudo runs commands as another user, provided the system sudo
+    implementation is setup to enable this. This does not allow running
+    applications securely, simply it allows the programmer to run a program
+    as another user (suid) using the sudo tools rather than suidperl.
+  
+    This module specifically runs a single command to get output which is
+    passed back to the user. The module does not currently allow for
+    interactive bidirectional communication between the callee and caller.
+    The module does not spool input into the callee.
+
+INSTALLATION
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+  Class::Accessor IPC::Run
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2004 by Scalable Informatics 
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8 or,
+at your option, any later version of Perl 5 you may have available.
