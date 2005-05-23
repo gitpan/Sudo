@@ -1,5 +1,11 @@
 Revision history for Perl extension Sudo.
 
+0.20  Mon May 23 00:20:00 2005
+	- fixed "=" bug
+	- added additional checks against sudo binary
+	- added then removed sudo shell bits.  Will create another 
+	  module for this
+        - updated documentation	  
 0.10  Mon Apr 19 17:02:49 2004
 	- original version; created by h2xs 1.23 with options
 		-AX -n Sudo

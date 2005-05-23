@@ -1,10 +1,10 @@
 package Sudo;
 
-use IPC::Run qw(run timeout start);
+use IPC::Run qw(run timeout start harness);
 use base qw(Class::Accessor);
 use strict;
 
-our $VERSION = '0.10';
+our $VERSION = '0.20';
 
 sub sudo_run
     {
@@ -29,7 +29,7 @@ sub sudo_run
      if ($self->{debug})
         {
 	  $ENV{IPCRUNDEBUG}='basic';
-	  if ($self->{debug} = 2) 
+	  if ($self->{debug} == 2) 
 	     {
 	       $ENV{IPCRUNDEBUG}='data';	       
 	     } 
@@ -67,6 +67,26 @@ sub sudo_run
 	          'error' => (sprintf 'Error: the sudo binary "%s" is not executable',$sudo)
 	         };
 	  return \%ret;
+	}
+     my @_sudo_stat_=stat($sudo);
+     
+     # this is a unixism, may need to change this for windows ...
+     if ($^O !~ /mswin32/i)
+        {
+	 if ($_sudo_stat_[4] != 0 )
+            {
+	      %ret = {
+	              'error' => (sprintf 'Error: the sudo binary "%s" is not owned by id=0',$sudo)
+	             };
+	      return \%ret;
+	    }
+	 if ($_sudo_stat_[5] != 0 )
+            {
+	      %ret = {
+	              'error' => (sprintf 'Error: the sudo binary "%s" is not set to group id = 0',$sudo)
+	             };
+	      return \%ret;
+	    }
 	}
      push @cmd,$sudo;
 
@@ -200,7 +220,8 @@ sub sudo_run
             );
 	    
      return \%ret;
-  }                   
+  }   
+                  
 1;
 __END__
 
@@ -243,7 +264,10 @@ Sudo runs commands as another user, provided the system sudo
 implementation is setup to enable this.  This does not allow
 running applications securely, simply it allows the programmer to
 run a program as another user (suid) using the sudo tools rather
-than suidperl.  
+than suidperl.  Suidperl is not generally recommended for 
+secure operation as another user.  While sudo itself is a single 
+point tool to enable one user to execute commands as another
+sudo does not itself make you any more or less secure.
 
 Warning:  This module does not make your code any more or less
 secure, it simply uses a different mechanism for running as a
@@ -305,9 +329,9 @@ Arguments to pass to program you wish to run.
 
 =over 4
  
-=item run_sudo
+=item sudo_run
 
-The C<run_sudo> function first checks the attributes to make sure
+The C<sudo_run> function first checks the attributes to make sure
 the minimum required set exists, and then attempts to execute 
 sudo without shell interpolation.  You will need to take this into
 account in case you get confusing failure modes.  You may set the
@@ -331,21 +355,34 @@ B<I/O> currently this is a fancy way to run a command as another
 user without being suid.  Eventually it may evolve to 
 have IO:: goodness, or similar functionality.
 
+=head1 BUGS
+
+As this module depends upon IPC::Run, it has all the bugs/limitations 
+of IPC::Run.  Spaces in file names, executables, and other I<odd> items 
+which give IPC::Run fits, will give Sudo fits.  We would like to fix this, 
+but this requires fixing IPC::Run.
+
+Insecurity as a bug.  Security is not a product or feature.  It is a process. 
+If your systems are grossly insecure to begin with, using Sudo will not
+help you.  Good security practice (not draconian security practice)
+is recommended across all systems.  Basic common sense on services, 
+file ownership, remote access, and so forth go a long way to helping 
+the process.  Start with the basics.  Work from there.  
 
 
 =head1 SEE ALSO
 
-sudo(8), perl(1)
+sudo(8), perl(1), IPC::Run, a good book on locking down a system
 
 
 
 =head1 AUTHOR
 
-Joe Landman, B<landman@scalableinformatics.com>, L<http://scalableinformatics.com>
+Joe Landman, B<landman@scalableinformatics.com>, L<http://www.scalableinformatics.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2004 by Scalable Informatics LLC
+Copyright (C) 2004,2005 by Scalable Informatics LLC
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8 or,

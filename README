@@ -1,4 +1,4 @@
-Sudo version 0.10
+Sudo version 0.20
 =================
 
     Sudo runs commands as another user, provided the system sudo
@@ -28,7 +28,7 @@ This module requires these other modules and libraries:
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2004 by Scalable Informatics 
+Copyright (C) 2004,2005 by Scalable Informatics 
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8 or,

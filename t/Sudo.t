@@ -16,7 +16,7 @@ BEGIN { use_ok('Sudo') };
 # Insert your test code below, the Test::More module is use()ed here so read
 # its man page ( perldoc Test::More ) for help writing this test script.
 
-my ($user,$pass,$sudo,$id,$su,$rc);
+my ($user,$pass,$sudo,$id,$su,$rc,$sudosh);
 
 
 print STDERR "\n\n-----\n";
@@ -56,6 +56,7 @@ ok (exists($rc->{stdout}), "Captured standard output");
 ok (exists($rc->{rc}), "Captured return code");
 ok (!exists($rc->{error}), "No error messages");
 
-#v0.10 Sudo.t:  Governed by the Artistic License
-#copyright (c) 2004 Scalable Informatics LLC
-#http://scalableinformatics.com
+
+#v0.20 Sudo.t:  Governed by the Artistic License
+#copyright (c) 2004,2005 Scalable Informatics LLC
+#http://www.scalableinformatics.com
