@@ -9,7 +9,10 @@ use Test::More tests => 4;
 use Data::Dumper;
 #use Sudo;
 
-BEGIN { use_ok('Sudo') };
+BEGIN { 
+	use_ok('Sudo') ;
+	die "FATAL ERROR: you must run these tests interactively!\n" if (!(-t STDIN));
+      };
 
 #########################
 

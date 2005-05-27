@@ -4,7 +4,7 @@ use IPC::Run qw(run timeout start harness);
 use base qw(Class::Accessor);
 use strict;
 
-our $VERSION = '0.20';
+our $VERSION = '0.21';
 
 sub sudo_run
     {

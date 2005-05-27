@@ -1,4 +1,4 @@
-Sudo version 0.20
+Sudo version 0.21
 =================
 
     Sudo runs commands as another user, provided the system sudo
@@ -20,11 +20,26 @@ To install this module type the following:
    make test
    make install
 
+Note:  The tests MUST be run interactively.  You will be prompted for a
+username and password. These are used only to test the module talking to 
+Sudo, so this user name and password must enable execution of the id program.
+You will need to have Sudo set up properly before this runs.
+
+
 DEPENDENCIES
 
 This module requires these other modules and libraries:
 
   Class::Accessor IPC::Run
+
+
+RESTRICTIONS/PLATFORMS
+
+This module will work only on Unix/Linux systems with a functional and
+operational Sudo command.  It will not work under Windows, and without
+further work to make sudo function properly under cygwin, it will not 
+work under cygwin.
+
 
 COPYRIGHT AND LICENCE
 

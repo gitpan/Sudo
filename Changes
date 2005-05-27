@@ -1,5 +1,15 @@
 Revision history for Perl extension Sudo.
-
+0.21  Fri May 27 11:18:00 2005
+	- added tests for windows and cygwin.  This module will not work
+	  under either OS.  It might be possible with Cygwin, but this would
+	  require too much additional work to make Sudo work correctly
+	  under Cygwin.
+	  Windows is not (and will not be) supported. It has a very different
+	  permissions model than Unix/Linux, and the purpose of this module
+	  is to exploit the Sudo command in Unix/Linux to enable execution of
+	  a command as another user.  There is no equivalent method in windows,
+	  as you need to adjust ACLs.  That is beyond the scope of this 
+	  module.  In unix, the ACLs are adjusted through the visudo command.
 0.20  Mon May 23 00:20:00 2005
 	- fixed "=" bug
 	- added additional checks against sudo binary
