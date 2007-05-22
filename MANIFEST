@@ -4,3 +4,4 @@ MANIFEST
 README
 t/Sudo.t
 lib/Sudo.pm
+META.yml                                 Module meta-data (added by MakeMaker)

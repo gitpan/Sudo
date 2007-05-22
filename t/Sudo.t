@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 4;
+use Test::More tests => 7;
 use Data::Dumper;
 #use Sudo;
 
@@ -59,6 +59,14 @@ ok (exists($rc->{stdout}), "Captured standard output");
 ok (exists($rc->{rc}), "Captured return code");
 ok (!exists($rc->{error}), "No error messages");
 
+$su->{hostname}	= "localhost";  # assume you can ssh to localhost without a password
+undef $rc;
+
+$rc = $su->sudo_run;
+
+ok (exists($rc->{stdout}), "Captured standard output");
+ok (exists($rc->{rc}), "Captured return code");
+ok (!exists($rc->{error}), "No error messages");
 
 #v0.20 Sudo.t:  Governed by the Artistic License
 #copyright (c) 2004,2005 Scalable Informatics LLC

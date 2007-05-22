@@ -1,0 +1,15 @@
+--- #YAML:1.0
+name:                Sudo
+version:             0.30
+abstract:            Perl extension for running a command line sudo
+license:             ~
+generated_by:        ExtUtils::MakeMaker version 6.32
+distribution_type:   module
+requires:     
+    Class::Accessor:               0.19
+    IPC::Run:                      0.79
+meta-spec:
+    url:     http://module-build.sourceforge.net/META-spec-v1.2.html
+    version: 1.2
+author:
+    - Joe Landman <landman@scalableinformatics.com>

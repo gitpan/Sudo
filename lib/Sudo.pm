@@ -2,9 +2,10 @@ package Sudo;
 
 use IPC::Run qw(run timeout start harness);
 use base qw(Class::Accessor);
-use strict;
 
-our $VERSION = '0.21';
+use strict;
+our $VERSION = '0.30';
+
 
 sub sudo_run
     {
@@ -12,7 +13,7 @@ sub sudo_run
      my $self = shift;
      my (%ret,$binary,$sudo,$program,$command,$sudo_args,$program_args);
      my ($final_cmd,$sudo_pipe_handle,@cmd,$in,$out,$err,$line);
-     my ($username);
+     my ($username,$remote_machine,$remote_user);
 
      # <deep sigh>  Ok, IPC::Run is very (I mean very) sensitive to 
      # its @cmd processing.  Each option has to be its own entry
@@ -41,7 +42,7 @@ sub sudo_run
      if (!defined($self->{sudo}))
         {
 	  %ret = {
-	          'error' => 'Error: the sudo attribute was not set'
+	          'error' => 'Error: you did not tell me where the sudo binary is was not set'
 	         };
 	  return \%ret;
 	}
@@ -52,38 +53,35 @@ sub sudo_run
 				    # some folks paths, but it
 				    # should be safer than allowing
 				    # any command string.
-     $sudo = $1;			    
-     if (! -e $sudo )
-        {
-	  %ret = {
-	          'error' => (sprintf 'Error: the sudo binary "%s" does not exist',$sudo)
-	         };
-	  return \%ret;
-	}
-
-     if (! -x $sudo )
-        {
-	  %ret = {
-	          'error' => (sprintf 'Error: the sudo binary "%s" is not executable',$sudo)
-	         };
-	  return \%ret;
-	}
-     my @_sudo_stat_=stat($sudo);
+     $sudo = $1;
      
-     # this is a unixism, may need to change this for windows ...
-     if ($^O !~ /mswin32/i)
+     # test for remote execution ... you need to have the ssh keys
+     # setup before this ...     
+     $remote_machine=$self->{hostname}if (defined($self->{hostname}));
+     if (defined($remote_machine))
         {
-	 if ($_sudo_stat_[4] != 0 )
+	  $remote_user	= getpwuid($<);  # default user name is the user running the script
+	  if (defined($self->{username}))
+	     {
+	       $remote_user	= $self->{username};
+	     }
+	   push @cmd,"ssh";
+	   push @cmd, (sprintf '%s@%s',$remote_user,$remote_machine);
+	}
+     if (!defined($remote_machine))
+        {   		    
+	 if (! -e $sudo )
             {
 	      %ret = {
-	              'error' => (sprintf 'Error: the sudo binary "%s" is not owned by id=0',$sudo)
+	              'error' => (sprintf 'Error: the sudo binary "%s" does not exist',$sudo)
 	             };
 	      return \%ret;
 	    }
-	 if ($_sudo_stat_[5] != 0 )
+
+	 if (! -x $sudo )
             {
 	      %ret = {
-	              'error' => (sprintf 'Error: the sudo binary "%s" is not set to group id = 0',$sudo)
+	              'error' => (sprintf 'Error: the sudo binary "%s" is not executable',$sudo)
 	             };
 	      return \%ret;
 	    }
@@ -112,10 +110,9 @@ sub sudo_run
 	  # process the arguments, splitting on white space
 	  $self->{sudo_args} =~ s/^\s+//;  # trim leading spaces
 	  $self->{sudo_args} =~ s/\s+$//;  # trim trailing spaces
-	  	  
-	  my @argh = split(/\s+/,$self->{sudo_args});
-	  push @cmd,@argh; 	
+	  push @cmd,(split(/\s+/,$self->{sudo_args})); 	
 	}
+	
      push @cmd,"-u";
      push @cmd,$self->{username};
 
@@ -133,7 +130,7 @@ sub sudo_run
 				    # should be safer than allowing
 				    # any command string.
      $program = $1;			    
-     if (! -e $program )
+     if (!defined($remote_machine) && (! -e $program ))
         {
 	  %ret = {
 	          'error' => (sprintf 'Error: the program "%s" does not exist',$program)
@@ -141,7 +138,7 @@ sub sudo_run
 	  return \%ret;
 	}
 
-     if (! -x $program )
+     if (!defined($remote_machine) && (! -x $program ))
         {
 	  %ret = {
 	          'error' => (sprintf 'Error: the program "%s" is not executable',$program)
@@ -158,10 +155,8 @@ sub sudo_run
 	  # Note:  this might break some programs due to the
 	  # multiple ways options may be specified and the actual
 	  # command line argument contents.  Hopefully it will be
-	  # ok to start...
-	  
-	  my @argh = split(/\s+/,$self->{program_args});
-	  push @cmd,@argh; 	
+	  # ok to start...	 
+	  push @cmd,(split(/\s+/,$self->{program_args})); 	
 	}
  
  
@@ -221,7 +216,9 @@ sub sudo_run
 	    
      return \%ret;
   }   
-                  
+
+
+
 1;
 __END__
 
@@ -241,7 +238,12 @@ Sudo - Perl extension for running a command line sudo
 		   username	=> $name, 
 		   password	=> $pass,
 		   program	=> '/path/to/binary',
-		   program_args	=> '...'
+		   program_args	=> '...',
+		  # and for remote execution ...
+
+		  [hostname	=> 'remote_hostname',]
+		  [username	=> 'remote_username']
+
 		  }
 		 );
    

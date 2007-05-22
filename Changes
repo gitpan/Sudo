@@ -1,4 +1,7 @@
 Revision history for Perl extension Sudo.
+0.30  Mon May 21 21:29:00 2007
+	- added remote capability via ssh.  Use hostname/username attributes to 
+	  force module to ssh to remote host before running sudo.
 0.21  Fri May 27 11:18:00 2005
 	- added tests for windows and cygwin.  This module will not work
 	  under either OS.  It might be possible with Cygwin, but this would
@@ -19,4 +22,3 @@ Revision history for Perl extension Sudo.
 0.10  Mon Apr 19 17:02:49 2004
 	- original version; created by h2xs 1.23 with options
 		-AX -n Sudo
-
