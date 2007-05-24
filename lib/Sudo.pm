@@ -1,10 +1,11 @@
 package Sudo;
 
 use IPC::Run qw(run timeout start harness);
+use Term::ReadPassword;
 use base qw(Class::Accessor);
 
 use strict;
-our $VERSION = '0.30';
+our $VERSION = '0.31';
 
 
 sub sudo_run
@@ -57,7 +58,7 @@ sub sudo_run
      
      # test for remote execution ... you need to have the ssh keys
      # setup before this ...     
-     $remote_machine=$self->{hostname}if (defined($self->{hostname}));
+     #$remote_machine=$self->{hostname}if (defined($self->{hostname}));
      if (defined($remote_machine))
         {
 	  $remote_user	= getpwuid($<);  # default user name is the user running the script

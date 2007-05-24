@@ -1,4 +1,6 @@
 Revision history for Perl extension Sudo.
+0.31  Wed May 23 22:57:00 2007
+	- remove remote execution for the moment ... it is broken
 0.30  Mon May 21 21:29:00 2007
 	- added remote capability via ssh.  Use hostname/username attributes to 
 	  force module to ssh to remote host before running sudo.

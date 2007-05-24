@@ -41,8 +41,7 @@ while (! -e $id)
    
 print STDERR  "\n\nEnter a user name to which you have a valid password: \n";
 chomp($user=<>);
-print STDERR  "Enter the correct password for the user name you just entered: \n";
-chomp($pass=<>);
+$pass = Term::ReadPassword::read_password('Enter the correct password for the user name you just entered: ');
 
 $su = Sudo->new(
 		{

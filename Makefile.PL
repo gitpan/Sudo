@@ -5,7 +5,7 @@ use ExtUtils::MakeMaker;
 
 BEGIN {
        die "FATAL ERROR: this package will not work under Windows\n" if ($^O =~ /MSwin32/i);
-warn "WARNING: this package may not work properly under Cygwin\n" if ($^O =~ /cygwin/i);
+       warn "WARNING: this package may not work properly under Cygwin\n" if ($^O =~ /cygwin/i);
       }
 
 WriteMakefile(
@@ -13,7 +13,8 @@ WriteMakefile(
     VERSION_FROM      => 'lib/Sudo.pm', # finds $VERSION
     PREREQ_PM         => {
 			  Class::Accessor => 0.19 , 
-			  IPC::Run => 0.79
+			  IPC::Run => 0.79,
+			  Term::ReadPassword	=> 0.06
 			 }, # e.g., Module::Name => 1.1
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/Sudo.pm', # retrieve abstract from module
