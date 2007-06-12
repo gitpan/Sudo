@@ -1,4 +1,10 @@
 Revision history for Perl extension Sudo.
+0.32  Tue Jun 12 00:20:00 2007
+	- fixed what I broke.
+	- added in test skipping in test more so it doesn't look like
+ 	  this module fails all tests when people run an interactive
+	  module test in a non-interactive test environment .....
+	- remote is still broken ... thinking about how to fix it.
 0.31  Wed May 23 22:57:00 2007
 	- remove remote execution for the moment ... it is broken
 0.30  Mon May 21 21:29:00 2007

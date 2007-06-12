@@ -5,13 +5,13 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 7;
+use Test::More  qw(no_plan);
 use Data::Dumper;
 #use Sudo;
 
 BEGIN { 
 	use_ok('Sudo') ;
-	die "FATAL ERROR: you must run these tests interactively!\n" if (!(-t STDIN));
+#	die "FATAL ERROR: you must run these tests interactively!\n" if (!(-t STDIN));
       };
 
 #########################
@@ -25,7 +25,9 @@ my ($user,$pass,$sudo,$id,$su,$rc,$sudosh);
 print STDERR "\n\n-----\n";
 $sudo = '/usr/bin/sudo';
 printf STDERR  "sudo found at %s\n",$sudo if (-e $sudo);
-while (! -e $sudo) 
+SKIP: {
+ skip "Not running interactively, so skipping interactive tests", 3 if (!(-t STDIN)); 
+ while (! -e $sudo) 
    {
     print  STDERR "Enter full path to sudo (e.g. /usr/bin/sudo): \n";
     chomp($sudo=<>);
@@ -57,16 +59,21 @@ $rc = $su->sudo_run;
 ok (exists($rc->{stdout}), "Captured standard output");
 ok (exists($rc->{rc}), "Captured return code");
 ok (!exists($rc->{error}), "No error messages");
-
+}
 $su->{hostname}	= "localhost";  # assume you can ssh to localhost without a password
 undef $rc;
 
-$rc = $su->sudo_run;
+SKIP: {
+skip "Cannot run sudo tests non-interactively", 3 if (!(-t STDIN));
+$rc = $su->sudo_run; 
+
 
 ok (exists($rc->{stdout}), "Captured standard output");
 ok (exists($rc->{rc}), "Captured return code");
 ok (!exists($rc->{error}), "No error messages");
 
+}
+ok(1, "Got to end of tests");
 #v0.20 Sudo.t:  Governed by the Artistic License
 #copyright (c) 2004,2005 Scalable Informatics LLC
 #http://www.scalableinformatics.com
