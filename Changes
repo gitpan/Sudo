@@ -1,4 +1,6 @@
 Revision history for Perl extension Sudo.
+0.33	Wed Apr 17 11:17:00 2013
+	- fixed hashref assignment to list bug
 0.32  Tue Jun 12 00:20:00 2007
 	- fixed what I broke.
 	- added in test skipping in test more so it doesn't look like

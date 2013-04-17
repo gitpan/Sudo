@@ -5,7 +5,7 @@ use Term::ReadPassword;
 use base qw(Class::Accessor);
 
 use strict;
-our $VERSION = '0.32';
+our $VERSION = '0.33';
 
 
 sub sudo_run
@@ -42,9 +42,9 @@ sub sudo_run
 	}
      if (!defined($self->{sudo}))
         {
-	  %ret = {
+	  %ret = (
 	          'error' => 'Error: you did not tell me where the sudo binary is was not set'
-	         };
+	         );
 	  return \%ret;
 	}
 	
@@ -73,17 +73,17 @@ sub sudo_run
         {   		    
 	 if (! -e $sudo )
             {
-	      %ret = {
+	      %ret = (
 	              'error' => (sprintf 'Error: the sudo binary "%s" does not exist',$sudo)
-	             };
+	             );
 	      return \%ret;
 	    }
 
 	 if (! -x $sudo )
             {
-	      %ret = {
+	      %ret = (
 	              'error' => (sprintf 'Error: the sudo binary "%s" is not executable',$sudo)
-	             };
+	             );
 	      return \%ret;
 	    }
 	}
@@ -100,9 +100,9 @@ sub sudo_run
      # ok, append the user information
      if (!defined($self->{username}))
         {
-	  %ret = {
+	  %ret = (
 	          'error' => 'Error:  username was not set'
-	         };
+	         );
 	  return \%ret;
 	}
      
@@ -119,9 +119,9 @@ sub sudo_run
 
      if (!defined($self->{program}))
         {
-	  %ret = {
+	  %ret = (
 	          'error' => 'Error: the program attribute was not set'
-	         };
+	         );
 	  return \%ret;
 	}
      $self->{program} =~ /^(\S+)$/;  # force binary to be a
@@ -133,17 +133,17 @@ sub sudo_run
      $program = $1;			    
      if (!defined($remote_machine) && (! -e $program ))
         {
-	  %ret = {
+	  %ret = (
 	          'error' => (sprintf 'Error: the program "%s" does not exist',$program)
-	         };
+	         );
 	  return \%ret;
 	}
 
      if (!defined($remote_machine) && (! -x $program ))
         {
-	  %ret = {
+	  %ret = (
 	          'error' => (sprintf 'Error: the program "%s" is not executable',$program)
-	         };
+	         );
 	  return \%ret;
 	}
      push @cmd,$program;
@@ -252,9 +252,9 @@ sub sudo_shell_start
 	}
      if (!defined($self->{sudo}))
         {
-	  %ret = {
+	  %ret = (
 	          'error' => 'Error: you did not tell me where the sudo binary is was not set'
-	         };
+	         );
 	  return \%ret;
 	}
 	
@@ -268,17 +268,17 @@ sub sudo_shell_start
      
      if (! -e $sudo )
         {
-	  %ret = {
+	  %ret = (
 	          'error' => (sprintf 'Error: the sudo binary "%s" does not exist',$sudo)
-	         };
+	         );
 	  return \%ret;
 	}
 
      if (! -x $sudo )
         {
-	  %ret = {
+	  %ret = (
 	          'error' => (sprintf 'Error: the sudo binary "%s" is not executable',$sudo)
-	         };
+	         );
 	  return \%ret;
 	}
      push @cmd,$sudo;
@@ -294,9 +294,9 @@ sub sudo_shell_start
      # ok, append the user information
      if (!defined($self->{username}))
         {
-	  %ret = {
+	  %ret = (
 	          'error' => 'Error:  username was not set'
-	         };
+	         );
 	  return \%ret;
 	}
      
